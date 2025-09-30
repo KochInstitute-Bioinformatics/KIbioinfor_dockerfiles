@@ -14,19 +14,14 @@ RUN python3 -m venv /opt/venv \
     && ln -s /opt/venv/bin/pip /usr/local/bin/pip \
     && ln -s /opt/venv/bin/python /usr/local/bin/python
 
-RUN R -e "install.packages(c(\
-  'cowplot','knitr','msigdbr','remotes','metap','devtools','R.utils','ggalt',\
-  'openxlsx','XML','gprofiler2','cluster','gplots','MetaCycle','ashr',\
-  'markdown','ggpubr','effectsize','rebus','GGally','VennDiagram',\
-  'ggVennDiagram','UpSetR','ComplexUpset','colorRamp2','esquisse'\
-), repos='http://cran.rstudio.com/')"
+RUN Rscript -e "install.packages('BiocManager', repos='http://cran.rstudio.com/'); \
+BiocManager::install(c('DESeq2','tximport','Rsamtools','Rhtslib','GenomicAlignments', \
+'ComplexHeatmap','rtracklayer','fgsea','apeglm','edgeR','MAGeCKFlute','org.Hs.eg.db', \
+'org.Mm.eg.db','GO.db','DOSE','clusterProfiler','AnnotationDbi')); \
+install.packages(c('cowplot','knitr','msigdbr','remotes','metap','devtools','R.utils', \
+'ggalt','openxlsx','XML','gprofiler2','cluster','gplots','MetaCycle','ashr','markdown', \
+'ggpubr','effectsize','rebus','GGally','VennDiagram','ggVennDiagram','UpSetR', \
+'ComplexUpset','colorRamp2','esquisse'), repos='http://cran.rstudio.com/')"
 
-
-RUN R -e "if (!requireNamespace('BiocManager', quietly=TRUE)) install.packages('BiocManager', \
-repos='http://cran.rstudio.com/'); BiocManager::install(c('DESeq2','tximport', \
-'Rsamtools','Rhtslib',\
-'GenomicAlignments','ComplexHeatmap','rtracklayer','fgsea','apeglm',\
-'edgeR','MAGeCKFlute','org.Hs.eg.db','org.Mm.eg.db'))"
-
-RUN R -e 'remotes::install_github("junjunlab/GseaVis")'
+RUN Rscript -e 'remotes::install_github("junjunlab/GseaVis")'
 
