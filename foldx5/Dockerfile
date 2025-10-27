@@ -19,10 +19,10 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /opt/foldx
 
 # Copy the FoldX zip file into the image
-COPY foldx5_1Linux64.zip .
+COPY foldx5_1Linux64_ver102725.zip .
 
 # Unzip FoldX and make the main executable runnable
-RUN unzip foldx5_1Linux64.zip && \
+RUN unzip foldx5_1Linux64_ver102725.zip && \
     chmod +x foldx_20251231 && \
     unzip yasaraPlugin.zip
 
