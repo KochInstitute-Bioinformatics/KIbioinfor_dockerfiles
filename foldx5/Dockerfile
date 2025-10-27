@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
 # Create working directory
 WORKDIR /opt/foldx
 
-# Copy the FoldX zip file into the image
+# Copy the FoldX zip file into the image - the zip needs to be added to the dir
 COPY foldx5_1Linux64_ver102725.zip .
 
 # Unzip FoldX and make the main executable runnable
