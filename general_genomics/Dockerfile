@@ -33,6 +33,9 @@ RUN apt-get update && apt-get install -y samtools && rm -rf /var/lib/apt/lists/*
 # Install bedtools
 RUN apt-get update && apt-get install -y bedtools && rm -rf /var/lib/apt/lists/*
 
+# Install bedops
+RUN apt-get update && apt-get install -y bedops && rm -rf /var/lib/apt/lists/*
+
 # Install minimap2 from source (latest version)
 RUN cd /tmp && \
     git clone https://github.com/lh3/minimap2.git && \
