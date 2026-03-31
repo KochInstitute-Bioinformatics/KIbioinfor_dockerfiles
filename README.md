@@ -62,6 +62,14 @@ Below is an outline of available Docker environments with placeholders for metad
 - **Key Packages**: _List of major R or Python packages installed_
 - **Usage Notes**: _Any special instructions for building or running_
 
+### `dREG`
+
+- **Author**: Allen Soberanes
+- **Purpose**: An image with a GPU-compatible version of dREG installed, for use in "detection of regulatory DNA using PRO-seq and GRO-seq data".
+- **Base Image**: rocker/cuda:4.0.5
+- **Key Packages**: [dREG](https://github.com/Danko-Lab/dREG), [Rgtsvm](https://github.com/Danko-Lab/Rgtsvm), htslib, samtools, bcftools, bedGraphToWig 
+- **Usage Notes**: You can specify the CUDA architecture to build Rgtsvm with by passing the argument during the Docker build step (e.g. `docker build --build-arg CUDA_ARCH=sm_90 -f Dockerfile`). Defaults to the Ada architecture (sm_89), for compatibility with MIT's Engaging cluster.
+
 ### `flye`
 
 - **Author**: Charlie Whittaker
