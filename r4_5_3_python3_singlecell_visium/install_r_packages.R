@@ -11,8 +11,8 @@ if (!requireNamespace('remotes', quietly=TRUE)) install.packages('remotes')
 # ===== CRAN PACKAGES =====
 message('Installing CRAN packages...')
 cran_pkgs <- unique(c(
-  # Core single-cell
-  'Seurat', 'Signac', 'Matrix',
+  # Core single-cell (remove Seurat/Signac - installed from GitHub)
+  'Matrix',
   # Data manipulation
   'dplyr', 'data.table', 'matrixStats',
   # Visualization
@@ -23,6 +23,8 @@ cran_pkgs <- unique(c(
   'gprofiler2', 'VAM',
   # Spatial
   'terra',
+  # Effect size / statistics
+  'effectsize',
   # Utilities
   'openxlsx', 'kableExtra', 'remotes',
   # Upset plots
@@ -62,21 +64,7 @@ bioc_pkgs <- unique(c(
 to_install <- setdiff(bioc_pkgs, rownames(installed.packages()))
 if (length(to_install) > 0) BiocManager::install(to_install, update=TRUE, ask=FALSE)
 
-# ===== REQUIRED GITHUB PACKAGES =====
-message('Installing required GitHub packages...')
-required_gh <- c(
-  'satijalab/seurat-wrappers',
-  'chris-mcginnis-ucsf/DoubletFinder',
-  'cole-trapnell-lab/monocle3',
-  'immunogenomics/harmony',
-  'bnprks/BPCells/r'
-)
-for (pkg in required_gh) {
-  message(paste('Installing', pkg))
-  remotes::install_github(pkg, upgrade='never')
-}
-
-# ===== OPTIONAL GITHUB PACKAGES =====
+# ===== OPTIONAL GITHUB PACKAGES (non-Seurat ecosystem) =====
 message('Installing optional GitHub packages...')
 optional_gh <- c(
   'hypercompetent/colorway',
