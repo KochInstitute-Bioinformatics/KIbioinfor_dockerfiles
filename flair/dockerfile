@@ -1,0 +1,35 @@
+FROM brookslab/flair:3.0.0
+
+# Update package lists
+RUN apt-get update && apt-get install -y \
+    git \
+    build-essential \
+    default-jre \
+    default-jdk \
+    python3 \
+    python3-dev \
+    pkg-config \
+    autoconf \
+    automake \
+    libtool \
+    && rm -rf /var/lib/apt/lists/*
+
+# Build htslib from source
+RUN cd /tmp && \
+    git clone --recurse-submodules https://github.com/samtools/htslib.git && \
+    cd htslib && \
+    autoreconf -i && \
+    ./configure && \
+    make && \
+    make install && \
+    ldconfig
+
+# Install intron-prospector
+RUN cd /opt && \
+    git clone https://github.com/diekhans/intron-prospector.git && \
+    cd intron-prospector && \
+    ./configure && \
+    make && \
+    make install
+
+ENV PATH="/usr/local/bin:${PATH}"
