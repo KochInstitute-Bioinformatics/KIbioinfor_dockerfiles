@@ -1,0 +1,5 @@
+# GseaVis is installed by a patched step in the Dockerfile (see the gseavis stage),
+# not by install_packages.R. This file only tells validate_packages.R to check it.
+# Format: <package name> <source>
+
+GseaVis  junjunlab/GseaVis@dbedddc126936cb1f59527dede77a65a29e55e65

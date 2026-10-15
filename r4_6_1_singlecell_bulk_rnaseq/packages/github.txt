@@ -1,0 +1,8 @@
+# GitHub packages, installed with pak
+# Format: <package name> <pak ref>   (ref is user/repo[/subdir][@ref])
+# The package name is what validate_packages.R loads.
+# BPCells and GseaVis have their own list files so each gets its own build stage.
+
+SeuratWrappers  satijalab/seurat-wrappers
+DoubletFinder   chris-mcginnis-ucsf/DoubletFinder
+harmony         immunogenomics/harmony

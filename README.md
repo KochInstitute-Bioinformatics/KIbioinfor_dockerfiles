@@ -224,12 +224,23 @@ Notes that apply to many of the R images:
 
 - **Author**: Charlie Whittaker
 - **Purpose**: Combined single-cell and bulk RNA-seq environment (successor to `r4_5_3`)
-- **Base Image**: rocker/verse:4.6.1
-- **Key Packages**: Everything in `r4_5_3`, plus enrichplot, ggtree, GseaVis, enrichit, msigdbr, yulab.utils, multcomp, sandwich, TH.data
-- **Usage Notes**: The packages are listed in `install_packages.R`. `validate_packages.R` stops the build if a listed package fails to load. Starts in `bash` with working directory `/work`.
+- **Base Image**: rocker/verse:4.6.1 (Ubuntu 24.04, Bioconductor 3.23)
+- **Key Packages**: Seurat 5.6, SingleR, slingshot, DoubletFinder, harmony, BPCells 0.3.1, SeuratWrappers, batchelor, DESeq2, edgeR, apeglm, tximport, clusterProfiler 4.20, enrichplot, enrichit, GSVA, GSEABase, UCell, GseaVis, ggtree, ComplexHeatmap, dittoSeq, scDataviz, SoupX, clustree, msigdbr, effectsize, multcomp, OmnipathR (51 packages in total; see `packages/`)
+- **Docker Hub**: `bumproo/r4_6_1_singlecell_bulk_rnaseq:2026-10-15`
+- **Usage Notes**:
+  - The packages are listed in `packages/*.txt`: `cran.txt`, `bioc.txt`, `github.txt`, `bpcells.txt` and `gseavis.txt`. To add a package, add it to the right list.
+  - The Dockerfile has one named stage per list (`base → cran → bioc → github → bpcells → gseavis → final`), and each stage is cached separately. A failure only re-runs that stage and the ones after it. Editing a list re-runs from that stage onward, and editing `install_packages.R` re-runs every install stage.
+  - To build up to a stage and debug the next step interactively: `docker build --target github -t r461:github .` then `docker run --rm -it r461:github bash`.
+  - CRAN packages install as pre-built binaries from the P3M mirror the rocker image is configured with. Bioconductor and GitHub packages compile from source.
+  - Parallel installs default to 4. Lower it with `--build-arg NCPUS=2` if compiles get killed for lack of memory.
+  - `validate_packages.R` loads every package in every list and fails the build if any don't load.
+  - Build and tag with the build date, from inside this directory: `docker build -t bumproo/r4_6_1_singlecell_bulk_rnaseq:<YYYY-MM-DD> .`
+  - The large mouse annotation packages in `r4_5_3` (`BSgenome.Mmusculus.UCSC.mm10`, `EnsDb.Mmusculus.v79`) are left out. Install them at runtime with `BiocManager::install()` if needed.
+  - Starts in `bash` with working directory `/work`.
 - **Potential Issues**:
-  - Validation covers 20 of about 50 installed packages. A CRAN or Bioconductor package that fails to install only produces a warning, so any package missing from the validation list can go missing without failing the build.
-  - The CRAN repo is `cloud.r-project.org`, not a date-pinned snapshot. GitHub packages are installed from HEAD.
+  - **GseaVis is patched during the build.** GseaVis (pinned to commit `dbedddc`) borrows DOSE's internal `get_organism`, which moved to GOSemSim in DOSE 4.5.1. Unpatched, the install fails with `object 'get_organism' not found`. The `gseavis` stage rewrites that line to call the exported `DOSE::get_organism`. Validation only checks that GseaVis loads, so test `df2gseaResult()` (the function that uses it) before relying on it. Once GseaVis fixes this upstream, the patch can go.
+  - **BPCells compiles from source.** It comes from r-universe (`bnprks.r-universe.dev`), which has no Ubuntu 24.04 binary. The compile needs `libhdf5-dev` and `cmake`, and takes about 8 minutes.
+  - The CRAN repo is P3M `latest`, not a date-pinned snapshot, so a rebuild can pick up newer package versions. The GitHub packages in `github.txt` are installed from HEAD.
 
 ---
 

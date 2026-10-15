@@ -1,0 +1,28 @@
+# Bioconductor packages (version matched to R by BiocManager; built from source)
+# One package per line; blank lines and # comments are ignored.
+
+SingleCellExperiment
+SummarizedExperiment
+BiocGenerics
+DelayedArray
+HDF5Array
+SingleR
+slingshot
+DESeq2
+edgeR
+apeglm
+tximport
+pcaMethods
+clusterProfiler
+enrichplot
+GSEABase
+GSVA
+UCell
+ggtree
+ComplexHeatmap
+dittoSeq
+scDataviz
+batchelor
+scRNAseq
+OmnipathR
+

@@ -1,2 +1,5 @@
 # VS Code workspace files
 *.code-workspace
+
+# Build logs
+*.log
