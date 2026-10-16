@@ -11,6 +11,7 @@ ggrepel
 cowplot
 patchwork
 ggpubr
+showtext
 clustree
 SoupX
 gprofiler2

@@ -15,6 +15,7 @@ tximport
 pcaMethods
 clusterProfiler
 enrichplot
+fgsea
 GSEABase
 GSVA
 UCell
