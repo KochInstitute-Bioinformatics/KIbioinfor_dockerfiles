@@ -225,7 +225,7 @@ Notes that apply to many of the R images:
 - **Author**: Charlie Whittaker
 - **Purpose**: Combined single-cell and bulk RNA-seq environment (successor to `r4_5_3`)
 - **Base Image**: rocker/verse:4.6.1 (Ubuntu 24.04, Bioconductor 3.23)
-- **Key Packages**: Seurat 5.6, SingleR, slingshot, DoubletFinder, harmony, BPCells 0.3.1, SeuratWrappers, batchelor, DESeq2, edgeR, apeglm, tximport, clusterProfiler 4.20, enrichplot, enrichit, GSVA, GSEABase, UCell, GseaVis, ggtree, ComplexHeatmap, dittoSeq, scDataviz, SoupX, clustree, msigdbr, effectsize, multcomp, OmnipathR (51 packages in total; see `packages/`)
+- **Key Packages**: Seurat 5.6, SingleR, slingshot, DoubletFinder, harmony, BPCells 0.3.1, SeuratWrappers, batchelor, DESeq2, edgeR, apeglm, tximport, clusterProfiler 4.20, enrichplot, fgsea, enrichit, GSVA, GSEABase, UCell, GseaVis, ggtree, ComplexHeatmap, dittoSeq, scDataviz, SoupX, clustree, showtext, msigdbr, effectsize, multcomp, OmnipathR (53 packages in total; see `packages/`)
 - **Docker Hub**: `bumproo/r4_6_1_singlecell_bulk_rnaseq:2026-10-15`
 - **Usage Notes**:
   - The packages are listed in `packages/*.txt`: `cran.txt`, `bioc.txt`, `github.txt`, `bpcells.txt` and `gseavis.txt`. To add a package, add it to the right list.
