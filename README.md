@@ -346,6 +346,17 @@ Notes that apply to many of the R images:
   - `condaforge/mambaforge` is deprecated (Miniforge replaced it), and the `:latest` tag is not pinned.
   - NanoPlot is installed with pip without a version pin.
 
+### `proseg`
+
+- **Author**: Charlie Whittaker
+- **Purpose**: Proseg (probabilistic cell segmentation for spatial transcriptomics), built from source
+- **Base Image**: Multi-stage build: `rust:1.88` (builder) and `debian:bookworm-slim` (runtime)
+- **Key Packages**: proseg v3.2.0 (cloned from https://github.com/dcjones/proseg at that tag), ca-certificates, procps
+- **Usage Notes**: The default command is `proseg`. The release tag is set with the `PROSEG_VERSION` build arg. Tested on the Engaging cluster.
+- **Potential Issues**:
+  - The Rust toolchain (`rust:1.88`) is pinned separately from the proseg tag, so a newer proseg release may need a newer `rust:` tag.
+  - Dependencies are resolved by `cargo install --path .` without `--locked`, so a rebuild can pick up different crate versions than the upstream `Cargo.lock`.
+
 ### `python`
 
 - **Author**: Charlie Whittaker
@@ -356,6 +367,34 @@ Notes that apply to many of the R images:
 - **Potential Issues**:
   - The Python packages are not pinned.
   - It overlaps with `general_genomics`.
+
+### `resolvi`
+
+- **Author**: Charlie Whittaker
+- **Purpose**: resolVI (`scvi.external.RESOLVI`) for spatial transcriptomics, from the current scvi-tools release
+- **Base Image**: python:3.12-slim-bookworm
+- **Key Packages**: scvi-tools 1.5.2 (PyPI), scanpy, leidenalg, jupyterlab
+- **Docker Hub**: `bumproo/resolvi:2026-11-04`
+- **Usage Notes**: The default command is `python`, and the working directory is `/data`. The PyPI torch wheels bundle CUDA, so run with `apptainer exec --nv` (or `docker run --gpus all`) to use a GPU. resolVI is slow without one. The build ends with an import check for `RESOLVI`. See `resolvi_builds.md` for how this differs from `resolvi_paperVariant`.
+- **Potential Issues**:
+  - The scvi-tools docs say resolVI moved to scVIVA-Tools from v1.5 and is no longer maintained in scvi-tools. 1.5.2 still ships `scvi.external.RESOLVI`, but later releases may not.
+  - Only `scvi-tools` is pinned. scanpy, leidenalg, jupyterlab and torch resolve to whatever is current on the build day.
+  - `rapids-singlecell` (optional GPU neighbor graph) is not installed, so resolVI uses the CPU neighbor graph.
+
+### `resolvi_paperVariant`
+
+- **Author**: Charlie Whittaker
+- **Purpose**: The software from the resolVI manuscript: patched scvi-tools plus the authors' reproducibility scripts
+- **Base Image**: python:3.12-slim-bookworm
+- **Key Packages**: patched scvi-tools (1.4.1 base with the paper's resolVI fixes, `scvi-tools-resolvi_fix.tar.gz`), the reproducibility code (`resolvi-reproducibility-main.tar.gz`) at `/opt/resolvi-reproducibility`, click, seaborn, pomegranate 1.x, harmony-pytorch, leidenalg, jupyterlab
+- **Docker Hub**: `bumproo/resolvi_papervariant:2026-11-04` (Docker requires a lowercase name)
+- **Usage Notes**: Both archives come from Zenodo (10.5281/zenodo.19811112) and are checked against their MD5 sums during the build. `run_model.py` and `_utils.py` are copied into `/opt/resolvi-reproducibility/scripts/`, because `run_model.py` imports `_utils` from its own directory. The default command is `python`, and the working directory is `/data`. GPU use is the same as for `resolvi`.
+- **Potential Issues**:
+  - The environment is not an exact match for the paper. The Zenodo archive has no lockfile, so torch, pyro, scanpy and the other dependencies resolve to whatever is current on the build day.
+  - The figure notebooks in the archive are Git LFS pointer files (about 130 bytes), not real notebooks. Only the scripts, marker JSON files and `_utils.py` are usable.
+  - The shell scripts in `training_scripts/` use the authors' data paths and refer to marker files such as `xenium_brain/celltype_markers.json`, which are in `figure2/` and `training_scripts/` in the archive. Edit the paths before running.
+  - `run_model.py` has a hardcoded `sys.path.insert` for the authors' home directory. It does nothing in the container.
+  - The build depends on Zenodo being reachable.
 
 ### `umitools`
 
