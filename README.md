@@ -242,6 +242,26 @@ Notes that apply to many of the R images:
   - **BPCells compiles from source.** It comes from r-universe (`bnprks.r-universe.dev`), which has no Ubuntu 24.04 binary. The compile needs `libhdf5-dev` and `cmake`, and takes about 8 minutes.
   - The CRAN repo is P3M `latest`, not a date-pinned snapshot, so a rebuild can pick up newer package versions. The GitHub packages in `github.txt` are installed from HEAD.
 
+### `r4_6_2_singlecell_bulk_visium`
+
+- **Author**: Yann Vanrobaeys
+- **Purpose**: Combined single-cell, spatial (Visium) and bulk RNA-seq environment, R only. It builds the `r4_6_1_singlecell_bulk_rnaseq` way (staged build from package lists) and adds the single-cell and spatial packages from `r4_5_1_python3_singlecell_visium`. The Python tools (CellBender, scVI) are left out.
+- **Base Image**: rocker/verse:4.6.2 (Ubuntu 26.04 "resolute")
+- **Key Packages**: Everything in `r4_6_1_singlecell_bulk_rnaseq`, plus the mouse annotation packages `BSgenome.Mmusculus.UCSC.mm10` and `EnsDb.Mmusculus.v79` (which `r4_6_1` leaves out), Signac, Azimuth, SeuratData, SeuratDisk, monocle3, velocyto.R, liana, pagoda2, DropletQC, scCustomize, colorway, rliger, scDblFinder, celldex, tradeSeq, condiments, chromVAR, motifmatchr, TFBSTools, JASPAR2024, LISI and kBET (90 packages in total; see `packages/`). First build: Seurat 6.0.0 with SeuratObject 5.4.0, Azimuth 0.5.1, monocle3 1.4.27, velocyto.R 0.6, Signac 1.17.1.
+- **Usage Notes**:
+  - The packages are listed in `packages/*.txt`: `cran.txt`, `bioc.txt`, `github.txt`, `bpcells.txt`, `gseavis.txt` and `velocyto.txt`. To add a package, add it to the right list. `gseavis.txt` and `velocyto.txt` only tell the validator to check packages that the Dockerfile installs in its own patched stages.
+  - The Dockerfile has one named stage per list (`base → cran → bioc → github → bpcells → gseavis → velocyto → final`), cached separately, as in `r4_6_1`. To build up to a stage: `docker build --target github -t r462:github .`
+  - Pass a GitHub token at build time to avoid the unauthenticated rate limit in the `github` stage: `docker build --build-arg GITHUB_PAT=<token> .`
+  - `validate_packages.R` loads every package in every list and fails the build if any don't load.
+  - Starts in `bash` with working directory `/work`.
+- **Potential Issues**:
+  - **CRAN is not frozen.** rocker/verse:4.6.2 points CRAN at P3M `latest`, so the first build got Seurat 6.0.0, not 5.x. Scripts written for Seurat v5 may behave differently. A rebuild can change versions again. The GitHub packages are installed from HEAD.
+  - **velocyto.R is patched during the build.** (1) `src/routines.cpp` passes a variable as the format string of `Rf_warning()`, which GCC 15 with `-Werror=format-security` rejects, so the `velocyto` stage changes it to `Rf_warning("%s", ...)`. (2) `src/Makevars` links `-lboost_system`, but Boost.System is header-only and Ubuntu's Boost 1.90 ships no such library, so the stage removes that flag. The package is pinned to commit `83e6ed9`. Validation only checks that it loads.
+  - **Azimuth's GitHub dependencies are listed explicitly.** With only `satijalab/azimuth` in `github.txt`, pak failed with `Can't find package called SeuratDisk, SeuratData`, even though Azimuth declares them in `Remotes`. `SeuratData` and `presto` are therefore listed in `github.txt` as well.
+  - **The image is large (about 14.6 GB).** Azimuth pulls in the human annotation packages (`BSgenome.Hsapiens.UCSC.hg38`, `EnsDb.Hsapiens.v86`), on top of the mouse ones.
+  - **Seen in the first build, not investigated.** pak replaced the Bioconductor OmnipathR (4.0.4) with the GitHub version (4.1.3) while resolving GitHub dependencies. Loading Seurat prints a note that SeuratObject was built under R 4.6.0 and Matrix 1.7.5, while the image has R 4.6.2 and Matrix 1.7-6.
+  - **Tested only by loading.** `library()` was run for Seurat, Azimuth, monocle3 and velocyto.R on Docker Desktop. No analysis has been run on real data in this image.
+
 ---
 
 ### Command-line tools (Nextflow)

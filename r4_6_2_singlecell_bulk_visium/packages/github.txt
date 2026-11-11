@@ -1,0 +1,26 @@
+# GitHub packages, installed with pak
+# Format: <package name> <pak ref>   (ref is user/repo[/subdir][@ref])
+# The package name is what validate_packages.R loads.
+# BPCells and GseaVis have their own list files so each gets its own build stage.
+
+SeuratWrappers  satijalab/seurat-wrappers
+DoubletFinder   chris-mcginnis-ucsf/DoubletFinder
+harmony         immunogenomics/harmony
+
+# --- added from r4_6_0_python3_singlecell_visium ---
+# Azimuth's DESCRIPTION lists SeuratData, SeuratDisk and presto as GitHub-only
+# dependencies (Remotes). pak failed to resolve SeuratData from that alone
+# ("Can't find package called SeuratDisk, SeuratData"), so request them directly.
+SeuratData    satijalab/seurat-data
+presto        immunogenomics/presto
+SeuratDisk    mojaveazure/seurat-disk
+Azimuth       satijalab/azimuth
+monocle3      cole-trapnell-lab/monocle3
+scCustomize   samuel-marsh/scCustomize
+liana         saezlab/liana
+colorway      hypercompetent/colorway
+pagoda2       kharchenkolab/pagoda2
+DropletQC     powellgenomicslab/DropletQC
+# Integration-benchmark metrics (iLISI/cLISI, kBET); package names are lisi and kBET
+lisi          immunogenomics/LISI
+kBET          theislab/kBET

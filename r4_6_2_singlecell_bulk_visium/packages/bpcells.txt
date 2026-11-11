@@ -1,0 +1,6 @@
+# BPCells, installed in its own build stage from r-universe
+# Format: <package name> <repo URL>
+# r-universe serves the latest BPCells release (0.3.1 as of Oct 2026) as source;
+# there is no Ubuntu 24.04 binary, so it compiles here (needs libhdf5-dev and cmake).
+
+BPCells  https://bnprks.r-universe.dev

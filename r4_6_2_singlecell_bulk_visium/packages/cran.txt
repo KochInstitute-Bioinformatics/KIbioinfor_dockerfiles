@@ -1,0 +1,42 @@
+# CRAN packages (installed as P3M binaries)
+# One package per line; blank lines and # comments are ignored.
+
+Seurat
+Matrix
+dplyr
+data.table
+matrixStats
+ggplot2
+ggrepel
+cowplot
+patchwork
+ggpubr
+showtext
+clustree
+SoupX
+gprofiler2
+openxlsx
+kableExtra
+effectsize
+enrichit
+msigdbr
+yulab.utils
+multcomp
+sandwich
+TH.data
+
+# --- added from r4_6_0_python3_singlecell_visium ---
+Signac
+terra
+rliger
+VAM
+tidyr
+purrr
+stringr
+ggrastr
+ggseqlogo
+writexl
+hexbin
+ComplexUpset
+HGNChelper
+scales
