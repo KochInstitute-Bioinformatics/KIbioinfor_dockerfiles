@@ -1,0 +1,5 @@
+# velocyto.R is installed by a patched step in the Dockerfile (see the velocyto stage),
+# not by install_packages.R. This file only tells validate_packages.R to check it.
+# Format: <package name> <source>
+
+velocyto.R  velocyto-team/velocyto.R@83e6ed92c2d9c9640122dcebf8ebbb5788165a21

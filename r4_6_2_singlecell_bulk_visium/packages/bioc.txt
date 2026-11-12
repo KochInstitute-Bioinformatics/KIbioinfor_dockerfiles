@@ -1,0 +1,41 @@
+# Bioconductor packages (version matched to R by BiocManager; built from source)
+# One package per line; blank lines and # comments are ignored.
+
+SingleCellExperiment
+SummarizedExperiment
+BiocGenerics
+DelayedArray
+HDF5Array
+SingleR
+slingshot
+DESeq2
+edgeR
+apeglm
+tximport
+pcaMethods
+clusterProfiler
+enrichplot
+fgsea
+GSEABase
+GSVA
+UCell
+ggtree
+ComplexHeatmap
+dittoSeq
+scDataviz
+batchelor
+scRNAseq
+OmnipathR
+
+# --- added from r4_6_0_python3_singlecell_visium ---
+celldex
+scDblFinder
+tradeSeq
+condiments
+chromVAR
+motifmatchr
+TFBSTools
+JASPAR2024
+# Large annotation packages (mouse mm10 genome / Ensembl v79)
+BSgenome.Mmusculus.UCSC.mm10
+EnsDb.Mmusculus.v79
